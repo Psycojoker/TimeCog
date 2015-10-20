@@ -1,7 +1,7 @@
-functions = {}
+cog_functions = {}
 
 def expose(function):
-    functions["%s.%s" % (function.__module__, function.__name)] = function
+    cog_functions["%s.%s" % (function.__module__.split(".")[-1], function.__name__)] = function
     return function
 
 
@@ -14,6 +14,6 @@ def click(organisation):
 
     for event_title, functions_call in organisation.items():
         for function, arguments in functions_call.items():
-            if function not in functions:
-                raise Exception("'%s' is not an available function, available functions are:\n%s\n" % (function, functions.keys()))
+            if function not in cog_functions:
+                raise Exception("'%s' is not an available function, available functions are:\n    * %s\n" % (function, "\n    * ".join(cog_functions.keys())))
             print function, arguments
