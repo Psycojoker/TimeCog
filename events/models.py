@@ -2,6 +2,8 @@ from django.db import models
 
 
 class Event(models.Model):
+    organisation = models.CharField(max_length=255)
+
     title = models.CharField(max_length=255)
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
