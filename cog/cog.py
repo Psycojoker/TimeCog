@@ -12,6 +12,8 @@ def click(organisation):
     else:
         locations = {}
 
-    for event_title, procedures in organisation.items():
-        for procedure in procedures:
-            pass
+    for event_title, functions_call in organisation.items():
+        for function, arguments in functions_call.items():
+            if function not in functions:
+                raise Exception("'%s' is not an available function, available functions are:\n%s\n" % (function, functions.keys()))
+            print function, arguments
