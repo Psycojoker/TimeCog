@@ -1,3 +1,6 @@
+from django.db import transaction
+
+
 cog_functions = {}
 
 def expose(function):
@@ -16,4 +19,6 @@ def click(organisation):
         for function, arguments in functions_call.items():
             if function not in cog_functions:
                 raise Exception("'%s' is not an available function, available functions are:\n    * %s\n" % (function, "\n    * ".join(cog_functions.keys())))
-            cog_functions[function](organisation=organisation, **arguments)
+
+            with transaction.atomic():
+                cog_functions[function](organisation=organisation, **arguments)
