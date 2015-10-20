@@ -5,7 +5,7 @@ class Event(models.Model):
     organisation = models.CharField(max_length=255)
 
     title = models.CharField(max_length=255)
-    date = models.DateField(null=True, blank=True)
+    date = models.DateField()
     time = models.TimeField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
