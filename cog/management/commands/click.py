@@ -5,6 +5,8 @@ import yamlordereddictloader
 
 from django.core.management.base import BaseCommand
 
+from cog import click
+
 
 class Command(BaseCommand):
     help = 'Click to cog'
@@ -21,4 +23,4 @@ class Command(BaseCommand):
             sys.exit(0)
 
         for organisation in organisations:
-            yaml.load(open(os.path.join("organisations", organisation)), Loader=yamlordereddictloader.Loader)
+            click(yaml.load(open(os.path.join("organisations", organisation)), Loader=yamlordereddictloader.Loader))
