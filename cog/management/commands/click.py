@@ -1,5 +1,7 @@
 import os
 import sys
+import yaml
+import yamlordereddictloader
 
 from django.core.management.base import BaseCommand
 
@@ -19,4 +21,4 @@ class Command(BaseCommand):
             sys.exit(0)
 
         for organisation in organisations:
-            print organisation
+            yaml.load(open(os.path.join("organisations", organisation)), Loader=yamlordereddictloader.Loader)
