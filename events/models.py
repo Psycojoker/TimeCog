@@ -25,6 +25,9 @@ class Event(models.Model):
 
     state = models.CharField(max_length=255, choices=EVENT_STATES)
 
+    def __unicode__(self):
+        return "[%s:%s:%s] %s on %s" % (self.organisation, self.kind, self.state, self.title, self.date.strftime("%F"))
+
 
 class EmailQuestion(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
