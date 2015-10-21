@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from .templates import Template
 from django.template import Context
 
-from events.models import Event
+from events.models import Event, EmailQuestion
 
 from cog import expose
 
@@ -58,3 +58,17 @@ def ensure_next_after_previous(state, kind, organisation, title, periodicity, mi
         event.save()
 
         candidate_date += timedelta(days=1)
+
+
+@expose
+def ask_by_email(organisation, kind, locations, state, interval, questions):
+    for event in Event.objects.filter(organisation=organisation, kind=kind, state=state):
+        already_existing_questions = EmailQuestion.objects.filter(event=event).order_by('-sent')
+
+        if not already_existing_questions.exists() or (date.today() - already_existing_questions.first().sent.date()).days > interval:
+            # TODO actually send email
+            print "Ask by email on the event '%s' the questions: '%s'" % (event, "', '".join(questions.keys()))
+            EmailQuestion.objects.create(
+                event=event,
+                questions=questions,
+            )
