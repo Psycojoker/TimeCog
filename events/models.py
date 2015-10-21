@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 
@@ -23,3 +24,11 @@ class Event(models.Model):
     )
 
     state = models.CharField(max_length=255, choices=EVENT_STATES)
+
+
+class EmailQuestion(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+    event = models.ForeignKey(Event)
+    sent = models.DateTimeField(auto_now_add=True)
+
+    questions = models.TextField()
