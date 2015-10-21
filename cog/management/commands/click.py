@@ -23,4 +23,4 @@ class Command(BaseCommand):
             sys.exit(0)
 
         for organisation in organisations:
-            click(yaml.load(open(os.path.join("organisations", organisation)), Loader=yamlordereddictloader.Loader))
+            click(organisation, yaml.load(open(os.path.join("organisations", organisation)), Loader=yamlordereddictloader.Loader))
