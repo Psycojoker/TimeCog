@@ -35,6 +35,8 @@ def ensure_next_after_previous(state, kind, organisation, title, periodicity, mi
     while candidate_date < minimum_from_today_absolute:
         candidate_date += periodicity
 
+    number_this_year = Event.objects.filter(organisation=organisation, kind=kind, date__year=date.today().year).count() + 1
+
     for i in range(number):
         while candidate_date.weekday() not in acceptable_weekdays:
             candidate_date += timedelta(days=1)
@@ -45,12 +47,12 @@ def ensure_next_after_previous(state, kind, organisation, title, periodicity, mi
         event.kind = kind
         event.date = candidate_date
 
-        event_title = Template(title).render(Context({
+        event.title = Template(title).render(Context({
             "event": event,
-            "number_this_year": Event.objects.filter(organisation=organisation, kind=kind, date__year=date.today().year).count()
+            "number_this_year": number_this_year,
         }))
 
-        print "Creating a new event '%s' for %s on %s state %s" % (event_title, organisation, candidate_date.strftime("%F"), state)
+        print "Creating a new event '%s' for %s on %s state %s" % (event.title, organisation, candidate_date.strftime("%F"), state)
 
         if time:
             event.time = datetime.time(**time)
@@ -61,7 +63,7 @@ def ensure_next_after_previous(state, kind, organisation, title, periodicity, mi
 
 
 @expose
-def ask_by_email(organisation, kind, locations, state, interval, questions):
+def ask_by_email(organisation, kind, locations, state, interval, title, questions):
     for event in Event.objects.filter(organisation=organisation, kind=kind, state=state):
         already_existing_questions = EmailQuestion.objects.filter(event=event).order_by('-sent')
 
